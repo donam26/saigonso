@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Input } from '@/components/ui/Input';
+import Input from '@/components/ui/Input';
 import { bookingService } from '@/services/booking.service';
 import { toast } from 'react-hot-toast';
 
@@ -33,10 +33,10 @@ const TIME_SLOTS = {
 
 export default function BookingPage() {
     const router = useRouter();
-    const [selectedDate, setSelectedDate] = useState('');
-    const [selectedTime, setSelectedTime] = useState('');
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [form, setForm] = useState<BookingForm>({
-        service_id: 0, // Sẽ được set khi chọn dịch vụ
+        service_id: 0,
         customer_name: '',
         phone_number: '',
         device_type: '',
@@ -45,10 +45,7 @@ export default function BookingPage() {
         booking_date: '',
         booking_time: '',
     });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [timeSlots, setTimeSlots] = useState<Record<string, string[]>>(TIME_SLOTS);
 
-    // Tạo mảng ngày trong 2 tuần tới
     const dates = Array.from({ length: 14 }, (_, i) => {
         const date = new Date();
         date.setDate(date.getDate() + i);
@@ -69,7 +66,7 @@ export default function BookingPage() {
     };
 
     const handleDateSelect = (date: string) => {
-        setSelectedDate(date);
+        setSelectedDate(new Date(date));
         setForm(prev => ({ ...prev, booking_date: date }));
     };
 
@@ -82,23 +79,21 @@ export default function BookingPage() {
         e.preventDefault();
 
         try {
-            setIsSubmitting(true);
-            const booking = await bookingService.createBooking(form);
+            await bookingService.createBooking(form);
             toast.success('Đặt lịch thành công!');
             router.push('/booking/success');
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Có lỗi xảy ra khi đặt lịch');
-        } finally {
-            setIsSubmitting(false);
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Có lỗi xảy ra khi đặt lịch');
+            }
         }
     };
 
     useEffect(() => {
         if (selectedDate) {
-            bookingService.getAvailableTimeSlots(selectedDate)
-                .then(data => {
-                    setTimeSlots(data);
-                })
+            bookingService.getAvailableTimeSlots(selectedDate.toISOString().split('T')[0])
                 .catch(error => {
                     console.error('Error fetching time slots:', error);
                     toast.error('Không thể tải danh sách khung giờ');
@@ -203,7 +198,7 @@ export default function BookingPage() {
                                             type="button"
                                             onClick={() => handleDateSelect(date)}
                                             className={`flex-shrink-0 w-24 p-3 rounded-xl border-2 transition-all hover:shadow-md ${
-                                                selectedDate === date
+                                                selectedDate && selectedDate.toISOString().split('T')[0] === date
                                                     ? 'border-[--primary-color] bg-orange-50 text-[--primary-color] shadow-md'
                                                     : 'border-gray-200 hover:border-gray-300'
                                             }`}

@@ -6,13 +6,14 @@ import Link from 'next/link';
 import { formatCurrency } from '@/utils/format';
 import serviceService, { Service } from '@/services/service.service';
 import { motion } from 'framer-motion';
+import { ENV_CONFIG } from '@/config/env.config';
 
 const DEFAULT_THUMBNAIL = '/images/default-thumbnail.jpg';
 
 const getImageUrl = (path: string | null) => {
   if (!path) return DEFAULT_THUMBNAIL;
   if (path.startsWith('http')) return path;
-  return `${process.env.NEXT_PUBLIC_API_URL}/storage/${path}`;
+  return `${ENV_CONFIG.API_STORAGE_URL}/${path}`;
 };
 
 interface Props {

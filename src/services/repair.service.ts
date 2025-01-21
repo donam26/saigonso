@@ -23,4 +23,6 @@ class RepairServiceClass {
     }
 }
 
-export default new RepairServiceClass(); 
+const repairService = new RepairServiceClass();
+
+export default repairService; 

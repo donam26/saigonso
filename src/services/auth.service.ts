@@ -13,13 +13,37 @@ export interface RegisterData {
   password_confirmation: string;
 }
 
+interface LoginResponse {
+  token: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  };
+}
+
+interface ProfileData {
+  name: string;
+  email: string;
+  phone: string;
+  avatar?: string;
+}
+
 const authService = {
   login: async (data: LoginData) => {
-    const response = await api.post('/api/auth/login', data);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+    try {
+      const response = await api.post<LoginResponse>('/auth/login', data);
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error('Đăng nhập thất bại');
     }
-    return response.data;
   },
 
   register: async (data: RegisterData) => {
@@ -36,12 +60,12 @@ const authService = {
   },
 
   getProfile: async () => {
-    const response = await api.get('/api/auth/profile');
+    const response = await api.get<ProfileData>('/api/auth/profile');
     return response.data;
   },
 
-  updateProfile: async (data: any) => {
-    const response = await api.put('/api/auth/profile', data);
+  updateProfile: async (data: ProfileData) => {
+    const response = await api.put<ProfileData>('/api/auth/profile', data);
     return response.data;
   },
 

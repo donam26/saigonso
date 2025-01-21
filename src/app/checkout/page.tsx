@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { Input } from '@/components/ui/Input';
+import Input from '@/components/ui/Input';
 import { RepairService } from '@/types/service';
 
 interface CartItem {

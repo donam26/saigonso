@@ -51,7 +51,7 @@ export function Sidebar() {
 
   const menuItems: MenuItem[] = [
     staticMenuItems[0], // Flash Sale luôn ở đầu
-    ...categories.map(category => ({
+    ...categories?.map(category => ({
       icon: category.icon || 'fas fa-wrench',
       label: category.name,
       href: `/categories/${category.slug}`,

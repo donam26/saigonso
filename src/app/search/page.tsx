@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -32,7 +32,7 @@ const getImageUrl = (path: string | null) => {
   return `${process.env.NEXT_PUBLIC_API_URL}/storage/${path}`;
 };
 
-export default function SearchPage() {
+function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const [services, setServices] = useState<Service[]>([]);
@@ -96,7 +96,7 @@ export default function SearchPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">
-          Kết quả tìm kiếm cho "{query}"
+          Kết quả tìm kiếm cho &ldquo;{query}&rdquo;
         </h1>
         <p className="text-gray-600 mt-2">
           Tìm thấy {services.length} dịch vụ
@@ -106,7 +106,7 @@ export default function SearchPage() {
       {services.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-gray-500 mb-4">
-            Không tìm thấy dịch vụ nào phù hợp với từ khóa "{query}"
+            Không tìm thấy dịch vụ nào phù hợp với từ khóa &ldquo;{query}&rdquo;
           </div>
           <Link href="/" className="text-[--primary-color] hover:underline">
             Về trang chủ
@@ -165,5 +165,30 @@ export default function SearchPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-8">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="bg-white rounded-lg shadow-sm">
+                <div className="aspect-square bg-gray-100 rounded-t-lg"></div>
+                <div className="p-4 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    }>
+      <SearchResults />
+    </Suspense>
   );
 } 

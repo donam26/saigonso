@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 import { AxiosError } from 'axios';
 import { AuthCard } from '@/components/auth/AuthCard';
-import { Input } from '@/components/ui/Input';
+import Input from '@/components/ui/Input';
 
 interface ErrorResponse {
   message: string;

@@ -6,27 +6,29 @@ import { toast } from 'react-toastify';
 import { BookingFormData, bookingService } from '@/services/booking.service';
 
 interface BookingFormProps {
-    customerId: number;
     serviceId: number;
-    onSuccess?: (booking: any) => void;
+    onSuccess?: (booking: BookingFormData) => void;
 }
 
-export default function BookingForm({ customerId, serviceId, onSuccess }: BookingFormProps) {
+export default function BookingForm({ serviceId, onSuccess }: BookingFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<BookingFormData>();
 
     const onSubmit = async (data: BookingFormData) => {
         try {
             setIsSubmitting(true);
-            const booking = await bookingService.createBooking({
+            await bookingService.createBooking({
                 ...data,
-                customer_id: customerId,
                 service_id: serviceId
             });
             toast.success('Đặt lịch thành công!');
-            onSuccess?.(booking);
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Có lỗi xảy ra khi đặt lịch');
+            onSuccess?.(data);
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Có lỗi xảy ra khi đặt lịch');
+            }
         } finally {
             setIsSubmitting(false);
         }

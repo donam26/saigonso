@@ -5,14 +5,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { formatCurrency } from '@/utils/format';
 import api from '@/services/api';
+import { ENV_CONFIG } from '@/config/env.config';
 
-const DEFAULT_BANNER = '/images/banner.jpg';
 const DEFAULT_THUMBNAIL = '/images/default-thumbnail.jpg';
 
 const getImageUrl = (path: string | null) => {
   if (!path) return DEFAULT_THUMBNAIL;
   if (path.startsWith('http')) return path;
-  return `${process.env.NEXT_PUBLIC_API_URL}/storage/${path}`;
+  return `${ENV_CONFIG.API_STORAGE_URL}/${path}`;
 };
 
 interface Service {
