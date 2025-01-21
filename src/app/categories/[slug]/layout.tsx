@@ -1,8 +1,12 @@
-import { Sidebar } from '@/components/layout/Sidebar';
-import { HomeContent } from '@/components/home/HomeContent';
-import { FloatingButtons } from '@/components/layout/FloatingButtons';
+'use client';
 
-export default function HomePage() {
+import { Sidebar } from '@/components/layout/Sidebar';
+
+export default function CategoryLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-4 lg:py-8">
@@ -16,12 +20,10 @@ export default function HomePage() {
 
           {/* Main Content */}
           <div className="flex-1">
-            <HomeContent />
+            {children}
           </div>
         </div>
       </div>
-
-      <FloatingButtons />
     </main>
   );
-}
+} 

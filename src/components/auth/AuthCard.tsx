@@ -14,7 +14,7 @@ export const AuthCard = ({ children, title, subtitle }: AuthCardProps) => {
         <div className="bg-white px-8 py-10 rounded-2xl shadow-xl">
           <div className="text-center mb-8">
             <Image
-              src="/logo.png"
+              src="/logo.jpg"
               alt="Logo"
               width={60}
               height={60}

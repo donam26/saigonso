@@ -1,21 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-color: #F00E0F;
+  --primary-dark-color: #d30c0d;
+  --primary-light-color: #ff3f40;
+  --secondary-color: #00a19d;
+  --gradient-primary: linear-gradient(135deg, #ff6b00 0%, #ff9248 100%);
+  --gradient-secondary: linear-gradient(135deg, #00a19d 0%, #00c4c0 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background-color: #f8fafc;
+  color: #334155;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-50;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[--primary-color] text-white hover:bg-[--primary-dark-color] transition-colors;
+  }
+  
+  .text-primary {
+    @apply text-[--primary-color];
+  }
+
+  .hover-text-primary {
+    @apply hover:text-[--primary-color] transition-colors;
+  }
+
+  .border-primary {
+    @apply border-[--primary-color];
+  }
+}
+
+/* Custom styles */
+.btn-primary::before {
+  content: '';
+  @apply absolute inset-0 bg-white/20 translate-x-[-100%] skew-x-[-15deg]
+         transition-transform duration-500;
+}
+
+.btn-primary:hover::before {
+  @apply translate-x-[100%];
+}
+
+.btn-outline {
+  @apply relative border-2 border-[--primary-color] text-[--primary-color] px-6 py-2.5 rounded-full font-medium
+         hover:bg-[--primary-color] hover:text-white transition-all duration-300
+         hover:shadow-lg hover:shadow-orange-500/30 active:scale-95;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-sm transition-all duration-300
+         hover:shadow-lg hover:shadow-gray-200/80 hover:-translate-y-1;
+}
+
+.section-title {
+  @apply text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3
+         relative pb-3 after:content-[''] after:absolute after:bottom-0 after:left-0
+         after:w-16 after:h-1 after:bg-[--primary-color] after:rounded-full;
+}
+
+.section-title i {
+  @apply text-[--primary-color] transition-transform duration-300 hover:scale-110;
+}
+
+.tag {
+  @apply relative bg-white text-gray-700 px-4 py-2 rounded-full font-medium
+         transition-all duration-300 hover:shadow-md hover:-translate-y-0.5
+         before:content-[''] before:absolute before:inset-0 before:rounded-full
+         before:bg-[--primary-color] before:scale-x-0 before:origin-left
+         before:transition-transform before:duration-300 hover:before:scale-x-100
+         hover:text-white;
+}
+
+.tag span {
+  @apply relative z-10;
+}
+
+.flash-sale-countdown {
+  @apply relative bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-lg font-bold text-xl
+         border border-white/20;
+  box-shadow: 0 4px 6px -1px rgb(240 14 15 / 0.2);
+}
+
+.flash-sale-item {
+  @apply relative overflow-hidden bg-white/5 rounded-xl transition-all duration-300
+         hover:-translate-y-1;
+  box-shadow: 0 10px 15px -3px rgb(240 14 15 / 0.2);
+}
+
+.flash-sale-item::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-b from-transparent opacity-0
+         transition-opacity duration-300;
+  background-image: linear-gradient(to bottom, transparent, rgba(211, 12, 13, 0.6));
+}
+
+.flash-sale-item:hover::before {
+  @apply opacity-100;
+}
+
+.flash-sale-badge {
+  @apply absolute top-3 right-3 bg-[--primary-color] text-white text-sm font-bold px-3 py-1.5
+         rounded-full animate-bounce;
+  box-shadow: 0 4px 6px -1px rgb(240 14 15 / 0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Hover effects */
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
+
+.hover-glow {
+  @apply transition-shadow duration-300 hover:shadow-lg hover:shadow-orange-500/20;
+}
+
+.hover-scale {
+  @apply transition-transform duration-300 hover:scale-105;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full transition-colors duration-300
+         hover:bg-gray-400;
+}
+
+/* Glass effect */
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20
+         shadow-lg shadow-black/5;
 }

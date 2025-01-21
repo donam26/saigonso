@@ -2,26 +2,24 @@ export interface RepairCategory {
   id: number;
   name: string;
   slug: string;
+  description: string;
+  thumbnail: string;
   icon: string;
-  description?: string;
-  is_active: boolean;
-  sort_order: number;
-  services?: RepairService[];
+  parent_id: number | null;
+  children?: RepairCategory[];
 }
 
 export interface RepairService {
   id: number;
-  category_id: number;
   name: string;
   slug: string;
-  description?: string;
-  base_price: number;
-  price_note?: string;
-  service_details?: string;
-  image?: string;
-  is_active: boolean;
-  sort_order: number;
-  category?: RepairCategory;
+  description: string;
+  price: number;
+  sale_price: number | null;
+  discount_percent: number | null;
+  thumbnail: string;
+  category_id: number;
+  category: RepairCategory;
 }
 
 export interface BookingForm {
